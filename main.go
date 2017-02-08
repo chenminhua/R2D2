@@ -20,7 +20,7 @@ func NotifyAll(db *gorm.DB, bot *telebot.Bot) {
     for {
         h, _, _ := time.Now().Clock();
         if (time.Now().Weekday() != 7) {   //周日不点
-            if h == 15 && flag {
+            if h == 8 && flag {
                 var allRestaurant []model.Restaurant
                 var allPeople []model.Person
 
@@ -35,7 +35,7 @@ func NotifyAll(db *gorm.DB, bot *telebot.Bot) {
                 s := fmt.Sprintf("今天是 %d 年 %d 月 %d 日, 今天的早餐店是 %s\n",
                     Y, M, D, restaurant.Name)
                 for index, food := range foods{
-                    s += fmt.Sprintf("%d %s %.1f\n", index, food.Name, food.Price)
+                    s += fmt.Sprintf("%d %s %.1f元\n", index, food.Name, food.Price)
                 }
                 for _, person := range allPeople {
                     bot.SendMessage(&telebot.Chat{ID:int64(person.ChatId)}, s, nil)
@@ -109,7 +109,7 @@ func main() {
             model.Db.Model(&restaurant).Related(&foods)
             s := fmt.Sprintf("今天的早餐店是 %s\n", restaurant.Name)
             for index, food := range foods{
-                s += fmt.Sprintf("%d %s %.1f\n", index, food.Name, food.Price)
+                s += fmt.Sprintf("%d %s %.1f元\n", index, food.Name, food.Price)
             }
             bot.SendMessage(message.Chat, s, nil)
         }
